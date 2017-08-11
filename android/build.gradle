@@ -13,6 +13,10 @@ buildscript {
 }
 
 allprojects {
+    tasks.withType(JavaCompile) {
+        options.fork = true
+        options.forkOptions.jvmArgs << '-XaddExports:jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED'
+    }
     repositories {
         mavenLocal()
         jcenter()
