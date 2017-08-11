@@ -1,0 +1,3 @@
+rootProject.name = 'wpp_clone'
+
+include ':app'
