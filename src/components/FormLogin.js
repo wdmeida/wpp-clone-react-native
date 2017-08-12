@@ -1,14 +1,10 @@
 import React from 'react';
-import { 
-  Button, 
-  StyleSheet, 
-  Text, 
-  TextInput,
-  TouchableHighlight,
-  View
- } from 'react-native';
- import { Actions } from 'react-native-router-flux';
- import { connect } from 'react-redux';
+import { Button, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { modificaEmail, modificaSenha } from '../actions/AutenticacaoActions';
 
 const formLogin = props => (
   <View style={styles.container} >
@@ -18,8 +14,14 @@ const formLogin = props => (
     </View>
     
     <View style={styles.inputView}>
-      <TextInput value={props.email} style={styles.input} placeholder='E-mail' />
-      <TextInput value={props.senha} style={styles.input} placeholder='Senha' />
+      <TextInput 
+        value={props.email} style={styles.input} 
+        placeholder='E-mail' onChangeText={texto => props.modificaEmail(texto)} 
+      />
+      <TextInput 
+        value={props.senha} style={styles.input} 
+        placeholder='Senha' onChangeText={senha => props.modificaSenha(senha)}
+      />
       <TouchableHighlight onPress={() => Actions.formCadastro()}>
         <Text style={styles.textLink}>Ainda não tem cadastro? Cadastre-se</Text>
       </TouchableHighlight>
@@ -67,5 +69,8 @@ const mapStateToProps = state => (
   }
 );
 
+const mapDispatchToProps = dispatch => bindActionCreators({ 
+  modificaEmail, modificaSenha 
+}, dispatch);
 
-export default connect(mapStateToProps)(formLogin);
+export default connect(mapStateToProps, mapDispatchToProps)(formLogin);

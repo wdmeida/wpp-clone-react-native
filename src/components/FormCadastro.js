@@ -1,17 +1,13 @@
 import React from 'react';
-import { 
-  Button,
-  StyleSheet, 
-  TextInput, 
-  View 
-} from 'react-native';
+import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { connect } from 'react-redux';
 
-export default props => (
+const formCadastro = props => (
   <View style={styles.container}>
     <View style={styles.inputView}>
-      <TextInput style={styles.input} placeholder='Nome' />
-      <TextInput style={styles.input} placeholder='E-mail' />
-      <TextInput style={styles.input} placeholder='Senha' />
+      <TextInput value={props.nome} style={styles.input} placeholder='Nome' />
+      <TextInput value={props.email} style={styles.input} placeholder='E-mail' />
+      <TextInput value={props.email} style={styles.input} placeholder='Senha' />
     </View>
     <View style={styles.buttonView}>
       <Button title='Cadastrar' color='#115E54' onPress={() => false} />
@@ -37,3 +33,10 @@ const styles = StyleSheet.create({
   }
 });
 
+const mapStateToProps = (state) => ({
+  nome: state.AutenticacaoReducer.nome,
+  email: state.AutenticacaoReducer.email,
+  senha: state.AutenticacaoReducer.senha
+});
+
+export default connect(mapStateToProps)(formCadastro);
