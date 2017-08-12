@@ -1,7 +1,12 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
-import FormLogin from './components/FormLogin';
+import Routes from './Routes';
+import reducers from './reducers';
 
 export default props => (
-  <FormLogin />
+  <Provider store={createStore(reducers)}>
+    <Routes />
+  </Provider>
 );

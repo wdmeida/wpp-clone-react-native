@@ -4,22 +4,31 @@ import {
   StyleSheet, 
   Text, 
   TextInput,
+  TouchableHighlight,
   View
  } from 'react-native';
+ import { Actions } from 'react-native-router-flux';
+ import { connect } from 'react-redux';
 
-export default props => (
+const formLogin = props => (
   <View style={styles.container} >
+    
     <View style={styles.titleView}>
       <Text style={styles.title}>WhatsApp Clone</Text>
     </View>
+    
     <View style={styles.inputView}>
-      <TextInput style={styles.input} placeholder='E-mail' />
-      <TextInput style={styles.input} placeholder='Senha' />
-      <Text style={styles.textLink}>Ainda não tem cadastro? Cadastre-se</Text>
+      <TextInput value={props.email} style={styles.input} placeholder='E-mail' />
+      <TextInput value={props.senha} style={styles.input} placeholder='Senha' />
+      <TouchableHighlight onPress={() => Actions.formCadastro()}>
+        <Text style={styles.textLink}>Ainda não tem cadastro? Cadastre-se</Text>
+      </TouchableHighlight>
     </View>
+    
     <View style={styles.buttonView}>
-      <Button style={styles.button} title='Acessar' onPress={() => false} />
+      <Button color='#115E54' title='Acessar' onPress={() => false} />
     </View>
+  
   </View>
 );
 
@@ -48,8 +57,15 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     flex: 2
-  },
-  button: {
-    color: '#115E54'
   }
 });
+
+const mapStateToProps = state => (
+  {
+    email: state.AutenticacaoReducer.email,
+    senha: state.AutenticacaoReducer.senha
+  }
+);
+
+
+export default connect(mapStateToProps)(formLogin);
