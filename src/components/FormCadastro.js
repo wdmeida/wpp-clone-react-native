@@ -1,21 +1,41 @@
 import React from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { Button, Image, StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { modificaEmail, modificaNome, modificaSenha } from '../actions/AutenticacaoActions';
+
+const backgroundImage = require('../imgs/bg.png');
 
 const formCadastro = props => (
-  <View style={styles.container}>
-    <View style={styles.inputView}>
-      <TextInput value={props.nome} style={styles.input} placeholder='Nome' />
-      <TextInput value={props.email} style={styles.input} placeholder='E-mail' />
-      <TextInput value={props.email} style={styles.input} placeholder='Senha' />
+  <Image style={styles.imageContainer} source={backgroundImage}>
+    <View style={styles.container}>
+      <View style={styles.inputView}>
+        <TextInput 
+          value={props.nome} style={styles.input} placeholderTextColor='#fff'
+          placeholder='Nome' onChangeText={nome => props.modificaNome(nome)} 
+        />
+        <TextInput 
+          value={props.email} style={styles.input} placeholderTextColor='#fff'
+          placeholder='E-mail' onChangeText={texto => props.modificaEmail(texto)} 
+        />
+        <TextInput 
+          secureTextEntry value={props.senha} style={styles.input} placeholderTextColor='#fff'
+          placeholder='Senha' onChangeText={senha => props.modificaSenha(senha)} 
+        />
+      </View>
+      <View style={styles.buttonView}>
+        <Button title='Cadastrar' color='#115E54' onPress={() => false} />
+      </View>
     </View>
-    <View style={styles.buttonView}>
-      <Button title='Cadastrar' color='#115E54' onPress={() => false} />
-    </View>
-  </View>
+  </Image>
 );
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    flex: 1,
+    width: null
+  },
   container: {
     flex: 1,
     padding: 10
@@ -33,10 +53,14 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   nome: state.AutenticacaoReducer.nome,
   email: state.AutenticacaoReducer.email,
   senha: state.AutenticacaoReducer.senha
 });
 
-export default connect(mapStateToProps)(formCadastro);
+const mapDispatchToProps = dispatch => bindActionCreators({ 
+  modificaEmail, modificaNome, modificaSenha 
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(formCadastro);
