@@ -15,6 +15,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, nome: action.payload };
     case 'cadastro_usuario_erro':
       return { ...state, erroCadastro: action.payload };
+    case 'cadastro_usuario_sucesso':
+      return { ...state, nome: '', senha: '' };
     default:
       return state;
   }

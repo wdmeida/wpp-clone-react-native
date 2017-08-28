@@ -6,6 +6,7 @@ import {
   View, 
   Text 
 } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 const LOGO = require('../imgs/logo.png');
 const BACKGROUND = require('../imgs/bg.png');
@@ -18,7 +19,7 @@ export default props => (
         <Image source={LOGO} />
       </View>
       <View style={styles.containerButton}>
-        <Button title="Fazer Login" onPress={() => false} />
+        <Button title="Fazer Login" onPress={() => Actions.formLogin()} />
       </View>
     </View>
   </Image>
