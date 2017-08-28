@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Button, Image, StyleSheet, TextInput, View } from 'react-native';
+import { 
+  Button, 
+  Image, 
+  StyleSheet, 
+  Text, 
+  TextInput,
+  View
+} from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -38,6 +45,7 @@ class FormCadastro extends Component {
               placeholderTextColor='#fff' placeholder='Senha' 
               onChangeText={senha => this.props.modificaSenha(senha)} 
             />
+            <Text style={styles.textError}>{this.props.erroCadastro}</Text>
           </View>
           <View style={styles.buttonView}>
             <Button 
@@ -68,6 +76,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 45
   },
+  textError: {
+    color: '#ff0000',
+    fontSize: 18
+  },
   buttonView: {
     flex: 1
   }
@@ -76,7 +88,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   nome: state.AutenticacaoReducer.nome,
   email: state.AutenticacaoReducer.email,
-  senha: state.AutenticacaoReducer.senha
+  senha: state.AutenticacaoReducer.senha,
+  erroCadastro: state.AutenticacaoReducer.erroCadastro
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ 
