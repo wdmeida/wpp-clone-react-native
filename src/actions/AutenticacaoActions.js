@@ -26,7 +26,7 @@ export const modificaNome = nome => (
 export const cadastraUsuario = ({ nome, email, senha }) => {
   return dispatch => {
     firebase.auth().createUserWithEmailAndPassword(email, senha)
-          .then((user) => {
+          .then(() => {
             const emailB64 = b64.encode(email);
             
             firebase.database().ref(`/contatos/${emailB64}`)
