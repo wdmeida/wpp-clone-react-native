@@ -1,43 +1,73 @@
-import React from 'react';
-import { Button, Image, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import React, { Component } from 'react';
+import { 
+  Button, 
+  Image, 
+  StyleSheet, 
+  Text, 
+  TextInput, 
+  TouchableHighlight, 
+  View 
+} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { modificaEmail, modificaSenha } from '../actions/AutenticacaoActions';
+import { 
+  autenticarUsuario,
+  modificaEmail, 
+  modificaSenha 
+} from '../actions/AutenticacaoActions';
 
 const backgroundImage = require('../imgs/bg.png');
 
-const formLogin = props => (
-  <Image style={styles.imageContainer} source={backgroundImage}>
-    
-    <View style={styles.container} >
-      
-      <View style={styles.titleView}>
-        <Text style={styles.title}>WhatsApp Clone</Text>
-      </View>
-      
-      <View style={styles.inputView}>
-        <TextInput 
-          value={props.email} style={styles.input} placeholderTextColor='#fff'
-          placeholder='E-mail' onChangeText={texto => props.modificaEmail(texto)} 
-        />
-        <TextInput 
-          secureTextEntry value={props.senha} style={styles.input} placeholderTextColor='#fff'
-          placeholder='Senha' onChangeText={senha => props.modificaSenha(senha)}
-        />
-        <TouchableHighlight onPress={() => Actions.formCadastro()}>
-          <Text style={styles.textLink}>Ainda não tem cadastro? Cadastre-se</Text>
-        </TouchableHighlight>
-      </View>
-      
-      <View style={styles.buttonView}>
-        <Button color='#115E54' title='Acessar' onPress={() => false} />
-      </View>
-    
-    </View>
-  </Image>
-);
+
+class FormLogin extends Component {
+
+  _autenticarUsuario() {
+    const { email, senha } = this.props;
+
+    this.props.autenticarUsuario({ email, senha });
+  }
+  
+  render() {
+    return (
+      <Image style={styles.imageContainer} source={backgroundImage}>  
+        <View style={styles.container}>         
+          <View style={styles.titleView}>
+            <Text style={styles.title}>WhatsApp Clone</Text>
+          </View>
+          <View style={styles.inputView}>
+            <TextInput 
+              value={this.props.email} 
+              style={styles.input} 
+              placeholderTextColor='#fff'
+              placeholder='E-mail' 
+              onChangeText={texto => this.props.modificaEmail(texto)} 
+            />
+            <TextInput 
+              secureTextEntry 
+              value={this.props.senha} 
+              style={styles.input} 
+              placeholderTextColor='#fff'
+              placeholder='Senha' 
+              onChangeText={senha => this.props.modificaSenha(senha)}
+            />
+            <TouchableHighlight onPress={() => Actions.formCadastro()}>
+              <Text style={styles.textLink}>Ainda não tem cadastro? Cadastre-se</Text>
+            </TouchableHighlight>
+          </View>
+          <View style={styles.buttonView}>
+            <Button 
+              color='#115E54' 
+              title='Acessar' 
+              onPress={() => this.autenticarUsuario()} 
+            />
+          </View>
+        </View>
+      </Image>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   imageContainer: {
@@ -81,7 +111,7 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => bindActionCreators({ 
-  modificaEmail, modificaSenha 
+  autenticarUsuario, modificaEmail, modificaSenha 
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(formLogin);
+export default connect(mapStateToProps, mapDispatchToProps)(FormLogin);
