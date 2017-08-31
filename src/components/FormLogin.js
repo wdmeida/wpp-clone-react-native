@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { 
+  ActivityIndicator,
   Button, 
   Image, 
   StyleSheet, 
@@ -28,6 +29,17 @@ class FormLogin extends Component {
 
     this.props.autenticarUsuario({ email, senha });
   }
+
+  renderBtnAcessar() {
+    if (this.props.loadingLogin) {
+      return (
+        <ActivityIndicator size='large' />
+      );
+    }
+    return (
+      <Button color='#115E54' title='Acessar' onPress={() => this._autenticarUsuario()} />
+    );
+  }
   
   render() {
     return (
@@ -52,16 +64,15 @@ class FormLogin extends Component {
               placeholder='Senha' 
               onChangeText={senha => this.props.modificaSenha(senha)}
             />
+            <Text style={styles.erroLogin}>
+              {this.props.erroLogin}
+            </Text>
             <TouchableHighlight onPress={() => Actions.formCadastro()}>
               <Text style={styles.textLink}>Ainda não tem cadastro? Cadastre-se</Text>
             </TouchableHighlight>
           </View>
           <View style={styles.buttonView}>
-            <Button 
-              color='#115E54' 
-              title='Acessar' 
-              onPress={() => this.autenticarUsuario()} 
-            />
+            {this.renderBtnAcessar()}
           </View>
         </View>
       </Image>
@@ -94,6 +105,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 45
   },
+  erroLogin: {
+    color: '#ff0000',
+    fontSize: 18
+  },
   textLink: {
     fontSize: 20,
     color: '#fff'
@@ -106,7 +121,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => (
   {
     email: state.AutenticacaoReducer.email,
-    senha: state.AutenticacaoReducer.senha
+    senha: state.AutenticacaoReducer.senha,
+    erroLogin: state.AutenticacaoReducer.erroLogin,
+    loadingLogin: state.AutenticacaoReducer.loadingLogin
   }
 );
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { 
+  ActivityIndicator,
   Button, 
   Image, 
   StyleSheet, 
@@ -26,6 +27,15 @@ class FormCadastro extends Component {
 
     this.props.cadastraUsuario({ nome, email, senha });
   }
+
+  renderBtnCadastro() {
+    if (this.props.loadingCadastro) {
+      return <ActivityIndicator size='large' />;
+    }
+    return (
+      <Button title='Cadastrar' color='#115E54' onPress={() => this._cadastraUsuario()} />
+    );
+  }
   
   render() {
     return (
@@ -48,10 +58,7 @@ class FormCadastro extends Component {
             <Text style={styles.textError}>{this.props.erroCadastro}</Text>
           </View>
           <View style={styles.buttonView}>
-            <Button 
-              title='Cadastrar' color='#115E54' 
-              onPress={() => this._cadastraUsuario()} 
-            />
+            {this.renderBtnCadastro()}
           </View>
         </View>
       </Image>
@@ -89,7 +96,8 @@ const mapStateToProps = state => ({
   nome: state.AutenticacaoReducer.nome,
   email: state.AutenticacaoReducer.email,
   senha: state.AutenticacaoReducer.senha,
-  erroCadastro: state.AutenticacaoReducer.erroCadastro
+  erroCadastro: state.AutenticacaoReducer.erroCadastro,
+  loadingCadastro: state.AutenticacaoReducer.loadingCadastro
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ 

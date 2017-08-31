@@ -2,29 +2,44 @@ import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import b64 from 'base-64';
 
+import { 
+  CADASTRO_EM_ANDAMENTO,
+  CADASTRO_USUARIO_ERRO,
+  CADASTRO_USUARIO_SUCESSO,
+  LOGIN_EM_ANDAMENTO,  
+  LOGIN_USUARIO_ERRO,  
+  LOGIN_USUARIO_SUCESSO,
+  MODIFICA_EMAIL,
+  MODIFICA_NOME,
+  MODIFICA_SENHA
+ } from './types';
+
 export const modificaEmail = texto => (
   {
-    type: 'modifica_email',
+    type: MODIFICA_EMAIL,
     payload: texto 
   }
 );
 
 export const modificaSenha = senha => (
   {
-    type: 'modifica_senha',
+    type: MODIFICA_SENHA,
     payload: senha
   }
 );
 
 export const modificaNome = nome => (
   {
-    type: 'modifica_nome',
+    type: MODIFICA_NOME,
     payload: nome
   }
 );
 
 export const cadastraUsuario = ({ nome, email, senha }) => {
   return dispatch => {
+
+    dispatch({ type: CADASTRO_EM_ANDAMENTO });
+
     firebase.auth().createUserWithEmailAndPassword(email, senha)
           .then(() => {
             const emailB64 = b64.encode(email);
@@ -38,17 +53,20 @@ export const cadastraUsuario = ({ nome, email, senha }) => {
 };
 
 const cadastroUsuarioSucesso = (dispatch) => {
-  dispatch({ type: 'cadastra_usuario_sucesso' });
+  dispatch({ type: CADASTRO_USUARIO_SUCESSO });
   // Navigated from the next scene.
   Actions.boasVindas();
 };
 
 const cadastroUsuarioErro = (erro, dispatch) => {
-  dispatch({ type: 'cadastro_usuario_erro', payload: erro.message });
+  dispatch({ type: CADASTRO_USUARIO_ERRO, payload: erro.message });
 };
 
 export const autenticarUsuario = ({ email, senha }) => {
   return dispatch => {
+
+    dispatch({ type: LOGIN_EM_ANDAMENTO });
+    
     firebase.auth().signInWithEmailAndPassword(email, senha)
           .then(() => loginUsuarioSucesso(dispatch))
           .catch(erro => loginUsuarioErro(erro, dispatch));
@@ -56,9 +74,11 @@ export const autenticarUsuario = ({ email, senha }) => {
 };
 
 const loginUsuarioSucesso = (dispatch) => {
-  dispatch({ type: 'login_usuario_sucesso' });
+  dispatch({ type: LOGIN_USUARIO_SUCESSO });
+  
+  Actions.principal();
 };
 
 const loginUsuarioErro = (erro, dispatch) => {
-  dispatch({ type: 'login_usuario_erro' });
+  dispatch({ type: LOGIN_USUARIO_ERRO, payload: erro.message });
 };
