@@ -1,20 +1,50 @@
-import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View
+import React, { Component } from 'react';
+import { 
+  StyleSheet, 
+  View 
 } from 'react-native';
+import { 
+  SceneMap, 
+  TabViewAnimated 
+} from 'react-native-tab-view';
 
-const Principal = props => (
-  <View style={styles.container}>
-    <Text>Página principal da aplicação</Text>
-  </View>
-);
+import TabBarMenu from './TabBarMenu';
+import Conversas from './Conversas';
+import Contatos from './Contatos';
+
+export default class Principal extends Component {
+  state = {
+    index: 0,
+    routes: [
+      { key: '1', title: 'Conversas' },
+      { key: '2', title: 'Contatos' },
+    ],
+  };
+
+  _handleIndexChange = index => this.setState({ index });
+
+  _renderHeader = props => <TabBarMenu {...props} />;
+
+  _renderScene = SceneMap({
+    '1': Conversas,
+    '2': Contatos,
+  });
+
+  render() {
+    return (
+      <TabViewAnimated
+        style={styles.container}
+        navigationState={this.state}
+        renderScene={this._renderScene}
+        renderHeader={this._renderHeader}
+        onIndexChange={this._handleIndexChange}
+      />
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100
-  }
+    flex: 1,
+  },
 });
-
-export default Principal;
