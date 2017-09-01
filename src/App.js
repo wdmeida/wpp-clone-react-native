@@ -5,7 +5,7 @@ import firebase from 'firebase';
 import ReduxThunk from 'redux-thunk';
 
 import Routes from './Routes';
-import reducers from './reducers';
+import reducers from './reducers'; // index is filename default
 
 export default class App extends Component {
   
