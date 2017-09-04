@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   StyleSheet,
@@ -14,37 +14,65 @@ import {
   modificaAdicionaContatoEmail 
 } from '../actions/AppActions';
 
-const AdicionarContato = props => (
-  <View style={styles.container}>
+class AdicionarContato extends Component {
+  
+  renderAdicionaContato() {
+    if (!this.props.cadastroResultadoInclusao) {
+      return (
 
-    <View style={styles.textInputView}>
-      <TextInput
-        style={styles.textInputEmail} 
-        placeholder='E-mail'
-        onChange={(texto) => props.modificaAdicionaContatoEmail(texto)}
-        value={props.adicionaContatoEmail}
-      />
-    </View>
+        <View style={styles.containerRenderAdicionaContatos}>
+          <View style={styles.textInputView}>
+            <TextInput
+              style={styles.textInputEmail} 
+              placeholder='E-mail'
+              onChange={(texto) => this.props.modificaAdicionaContatoEmail(texto)}
+              value={this.props.adicionaContatoEmail}
+            />
+          </View>
 
-    <View style={styles.buttonView}>
-      <Button 
-        title='Adicionar' 
-        color='#115E54' 
-        onPress={() => props.adicionaContato(props.adicionaContatoEmail)} 
-      />
-      <Text style={styles.textError}>
-        {props.cadastroErro}
-      </Text>
-    </View>
+          <View style={styles.buttonView}>
+            <Button 
+              title='Adicionar' 
+              color='#115E54' 
+              onPress={() => this.props.adicionaContato(this.props.adicionaContatoEmail)} 
+            />
+            <Text style={styles.textError}>
+              {this.props.cadastroErro}
+            </Text>
+          </View>
+        </View>
+      );
+    } 
+      
+    return (
+        <View>
+          <Text style={styles.textCadastroSucesso}>
+            Cadastro realizado com sucesso!
+          </Text>
+        </View>
+      );
+  }
 
-  </View>
-);
+  render() {
+    return (
+      <View style={styles.container}>
+        {this.renderAdicionaContato()}
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 20
+  },
+  containerRenderAdicionaContatos: {
+    flex: 1
+  },
+  textCadastroSucesso: {
+    fontSize: 20
   },
   textInputView: {
     flex: 1,
@@ -65,7 +93,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   adicionaContatoEmail: state.AppReducer.adicionaContatoEmail,
-  cadastroErro: state.AppReducer.cadastroErro
+  cadastroErro: state.AppReducer.cadastroErro,
+  cadastroResultadoInclusao: state.AppReducer.cadastroResultadoInclusao
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
