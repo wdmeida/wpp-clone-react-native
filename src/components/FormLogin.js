@@ -26,7 +26,6 @@ class FormLogin extends Component {
 
   _autenticarUsuario() {
     const { email, senha } = this.props;
-
     this.props.autenticarUsuario({ email, senha });
   }
 

@@ -15,6 +15,11 @@ import {
 } from '../actions/AppActions';
 
 class AdicionarContato extends Component {
+
+  _adicionaContato() {
+    const { adicionaContatoEmail } = this.props;
+    this.props.adicionaContato(adicionaContatoEmail);
+  }
   
   renderAdicionaContato() {
     if (!this.props.cadastroResultadoInclusao) {
@@ -23,10 +28,10 @@ class AdicionarContato extends Component {
         <View style={styles.containerRenderAdicionaContatos}>
           <View style={styles.textInputView}>
             <TextInput
+              value={this.props.adicionaContatoEmail}  
               style={styles.textInputEmail} 
               placeholder='E-mail'
-              onChange={(texto) => this.props.modificaAdicionaContatoEmail(texto)}
-              value={this.props.adicionaContatoEmail}
+              onChangeText={email => this.props.modificaAdicionaContatoEmail(email)}
             />
           </View>
 
@@ -34,7 +39,7 @@ class AdicionarContato extends Component {
             <Button 
               title='Adicionar' 
               color='#115E54' 
-              onPress={() => this.props.adicionaContato(this.props.adicionaContatoEmail)} 
+              onPress={() => this._adicionaContato()} 
             />
             <Text style={styles.textError}>
               {this.props.cadastroErro}

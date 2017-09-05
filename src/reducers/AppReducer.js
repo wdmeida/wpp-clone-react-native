@@ -13,11 +13,11 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case MODIFICA_ADICIONA_CONTATO_EMAIL:
-      return { ...state, adicionaContatoEmail: action.payload }
+      return { ...state, adicionaContatoEmail: action.payload };
     case ADICIONA_CONTATO_ERRO:
       return { ...state, cadastroErro: action.payload };
     case ADICIONA_CONTATO_SUCESSO:
-      return { ...state, cadastroResultadoInclusao: true };
+      return { ...state, cadastroResultadoInclusao: action.payload, adicionaContatoEmail: '' };
     default:
       return state;
   }
