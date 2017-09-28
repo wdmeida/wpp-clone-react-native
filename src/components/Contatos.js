@@ -13,40 +13,54 @@ import { contatosUsuarioFetch } from '../actions/AppActions';
 
 class Contatos extends Component {
 
-  constructor(props) {
-    super(props);
+  componentWillMount() {
+    this.props.contatosUsuarioFetch();
+    this.criaFonteDeDados(this.props.contatos);
+  }
 
+  componentWillReceiveProps(nextProps) {
+    this.criaFonteDeDados(nextProps.contatos);
+  }
+
+  criaFonteDeDados(contatos) {
     //Verifica se os elementos sofreram alterações.
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
+    
     // Clona os registro, pois como são imutáveis, não podem ser alterados e sim ter 
     // o estado evoluído e poder saber se pode renderizar ou não, quanto forem detectadas
     // alterações.
-    this.state = { fonteDeDados: ds.cloneWithRows([
-      'Registro 1',
-      'Registro 2',
-      'Registro 3',
-      'Registro 4'
-    ]) };
-  }
-
-  componentWillMount() {
-    this.props.contatosUsuarioFetch();
+    this.fonteDeDados = ds.cloneWithRows(contatos);
   }
 
   render() {
     return (
       <ListView
-        dataSource={this.state.fonteDeDados}
-        renderRow={data => <View><Text>{data}</Text></View>}
+        enableEmptySections
+        dataSource={this.fonteDeDados}
+        renderRow={data => (
+              <View style={styles.itemContainer}>
+                <Text style={styles.nameStyle}>{data.nome}</Text>
+                <Text style={styles.emailStyle}>{data.email}</Text>
+              </View>
+            )
+        }
       />
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  itemContainer: {
+    flex: 1,
+    padding: 20,
+    borderBottomWidth: 1,
+    borderColor: '#CCC'
+  },
+  nameStyle: {
+    fontSize: 25
+  },
+  emailStyle: {
+    fontSize: 18
   }
 });
 
@@ -54,7 +68,7 @@ const mapStateToProps = state => {
   const contatos = _.map(state.ListaContatosReducer, (val, uid) => {
     return { ...val, uid };
   });
-  return {};
+  return { contatos };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
