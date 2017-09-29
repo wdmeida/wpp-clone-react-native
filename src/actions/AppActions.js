@@ -16,10 +16,8 @@ export const modificaAdicionaContatoEmail = texto => (
   }
 );
 
-export const adicionaContato = email => {
-  
-  return dispatch => {
-    
+export const adicionaContato = email => (
+  dispatch => {
     const emailB64 = b64.encode(email);
     
     firebase.database().ref(`/contatos/${emailB64}`)
@@ -44,8 +42,8 @@ export const adicionaContato = email => {
             });
           }
         });
-    };
-};
+  }
+);
 
 const adicionaContatoErro = (erro, dispatch) => (
   dispatch({
