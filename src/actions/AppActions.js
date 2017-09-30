@@ -103,7 +103,6 @@ export const enviarMensagem = (mensagem, contatoNome, contatoEmail) => {
           .set({ nome: contatoNome, email: contatoEmail });
       })
       .then(() => { //Armazenar o cabeçalho de conversa do contato.
-        
         firebase.database().ref(`/contatos/${usuarioEmailB64}`)
           .once('value')
           .then(snapshot => {
@@ -111,7 +110,7 @@ export const enviarMensagem = (mensagem, contatoNome, contatoEmail) => {
             const dadosUsuario = _.first(_.values(snapshot.val()));
 
             firebase.database().ref(`/usuario_conversas/${contatoEmailB64}/${usuarioEmailB64}`)
-              .set({ nome: dadosUsuario.nome, email: usuarioEmail })
+              .set({ nome: dadosUsuario.nome, email: usuarioEmail });
           });
       });
   };
