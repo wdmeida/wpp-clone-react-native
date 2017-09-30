@@ -7,10 +7,22 @@ import {
   TouchableHighlight,
   View
 } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { 
+  enviarMensagem, 
+  modificaMensagem 
+} from '../actions/AppActions';
 
 const ENVIAR_MENSAGEM_IMG = require('../imgs/enviar_mensagem.png');
 
-export default class Conversa extends Component {
+class Conversa extends Component {
+  _enviarMensagem() {
+    const { mensagem, contatoNome, contatoEmail } = this.props;
+    this.props.enviarMensagem(mensagem, contatoNome, contatoEmail);
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -20,10 +32,12 @@ export default class Conversa extends Component {
         
         <View style={styles.viewActions}>
           <TextInput
+            value={this.props.mensagem}
+            onChangeText={texto => this.props.modificaMensagem(texto)}
             style={styles.textInput}
           />
           <TouchableHighlight 
-            onPress={() => false} 
+            onPress={this._enviarMensagem.bind(this)} 
             underlayColor='#FFF'
           >
             <Image source={ENVIAR_MENSAGEM_IMG} />
@@ -55,3 +69,13 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 });
+
+const mapStateToProps = state => ({
+  mensagem: state.AppReducer.mensagem
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  enviarMensagem, modificaMensagem
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Conversa);
