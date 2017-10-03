@@ -6,6 +6,7 @@ import {
   ADICIONA_CONTATO_ERRO,
   ADICIONA_CONTATO_SUCESSO,
   LISTA_CONTATO_USUARIO,
+  LISTA_CONVERSA_USUARIO,
   MODIFICA_ADICIONA_CONTATO_EMAIL,
   MODIFICA_MENSAGEM 
 } from './types';
@@ -114,4 +115,19 @@ export const enviarMensagem = (mensagem, contatoNome, contatoEmail) => {
           });
       });
   };
+};
+
+export const conversaUsuarioFetch = contatoEmail => {
+  const { currentUser } = firebase.auth();
+
+  //Compor os emails na base64
+  const usuarioEmailB64 = b64.encode(currentUser.email);
+  const contatoEmailB64 = b64.encode(contatoEmail);
+
+  return dispatch => {
+    firebase.database().ref(`/mensagens/${usuarioEmailB64}/${contatoEmailB64}`)
+     .on('value', snapshot => {
+       dispatch({ type: LISTA_CONVERSA_USUARIO, payload: snapshot.val() });
+     })
+  }
 };

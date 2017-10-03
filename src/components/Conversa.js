@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 
-import { 
+import {
+  conversaUsuarioFetch, 
   enviarMensagem, 
   modificaMensagem 
 } from '../actions/AppActions';
@@ -18,6 +20,11 @@ import {
 const ENVIAR_MENSAGEM_IMG = require('../imgs/enviar_mensagem.png');
 
 class Conversa extends Component {
+
+  componentWillMount() {
+    this.props.conversaUsuarioFetch(this.props.contatoEmail);
+  }
+
   _enviarMensagem() {
     const { mensagem, contatoNome, contatoEmail } = this.props;
     this.props.enviarMensagem(mensagem, contatoNome, contatoEmail);
@@ -70,12 +77,19 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = state => ({
-  mensagem: state.AppReducer.mensagem
-});
+const mapStateToProps = state => {
+  const conversa = _.map(state.ListaConversaReducer, (val, uid) => {
+    return { ...val, uid };
+  });
+  
+  return ({
+    conversa,        
+    mensagem: state.AppReducer.mensagem
+  });
+};
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  enviarMensagem, modificaMensagem
+  conversaUsuarioFetch, enviarMensagem, modificaMensagem
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Conversa);
