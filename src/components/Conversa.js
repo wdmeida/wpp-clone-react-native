@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ListView,
   Image,
   StyleSheet, 
   Text,
@@ -23,6 +24,16 @@ class Conversa extends Component {
 
   componentWillMount() {
     this.props.conversaUsuarioFetch(this.props.contatoEmail);
+    this.criaFonteDeDados(this.props.conversa);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.criaFonteDeDados(nextProps.conversa);
+  }
+
+  criaFonteDeDados(conversa) {
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    this.dataSource = ds.cloneWithRows(conversa);
   }
 
   _enviarMensagem() {
@@ -30,11 +41,26 @@ class Conversa extends Component {
     this.props.enviarMensagem(mensagem, contatoNome, contatoEmail);
   }
 
+  renderRow(texto) {
+    return (
+      <View>
+        <Text>{texto.mensagem}</Text>
+        <Text>{texto.tipo}</Text>
+      </View>
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.viewList}>
-          <Text>Lista</Text>
+          <Text>
+            <ListView
+              enableEmptySections
+              dataSource={this.dataSource}
+              renderRow={this.renderRow}
+            />
+          </Text>
         </View>
         
         <View style={styles.viewActions}>
