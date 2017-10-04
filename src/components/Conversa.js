@@ -42,10 +42,16 @@ class Conversa extends Component {
   }
 
   renderRow(texto) {
+    if (texto.tipo === 'e') {
+      return (
+        <View style={styles.messageSendView}>
+          <Text style={styles.messageSendText}>{texto.mensagem}</Text>
+        </View>
+      );
+    } 
     return (
-      <View>
-        <Text>{texto.mensagem}</Text>
-        <Text>{texto.tipo}</Text>
+      <View style={styles.messageReceiveView}>
+        <Text style={styles.messageReceiveText}>{texto.mensagem}</Text>
       </View>
     );
   }
@@ -100,6 +106,32 @@ const styles = StyleSheet.create({
     flex: 4,
     backgroundColor: '#FFF',
     fontSize: 18
+  },
+  messageSendView: {
+    alignItems: 'flex-end',
+    marginTopo: 5,
+    marginBottom: 5,
+    marginLeft: 40
+  },
+  messageSendText: {
+    fontSize: 18,
+    color: '#000',
+    padding: 10,
+    backgroundColor: '#DBF5B4',
+    elevation: 1
+  },
+  messageReceiveView: {
+    alignItems: 'flex-starg',
+    marginTopo: 5,
+    marginBottom: 5,
+    marginRight: 40
+  },
+  messageReceiveText: {
+    fontSize: 18,
+    color: '#000',
+    padding: 10,
+    backgroundColor: '#F7F7F7',
+    elevation: 1
   }
 });
 

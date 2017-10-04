@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { 
   ADICIONA_CONTATO_ERRO,
   ADICIONA_CONTATO_SUCESSO,
+  ENVIA_MENSAGEM_SUCESSO,
   LISTA_CONTATO_USUARIO,
   LISTA_CONVERSA_USUARIO,
   MODIFICA_ADICIONA_CONTATO_EMAIL,
@@ -97,7 +98,7 @@ export const enviarMensagem = (mensagem, contatoNome, contatoEmail) => {
       .then(() => {
         firebase.database().ref(`/mensagens/${contatoEmailB64}/${usuarioEmailB64}`)
           .push({ mensagem, tipo: 'r' })
-          .then(() => dispatch({ type: 'xyz' }));
+          .then(() => dispatch({ type: ENVIA_MENSAGEM_SUCESSO }));
       })
       .then(() => { //Armazenar o cabeçalho de conversa do usuário autenticado.
         firebase.database().ref(`/usuario_conversas/${usuarioEmailB64}/${contatoEmailB64}`)
@@ -128,6 +129,6 @@ export const conversaUsuarioFetch = contatoEmail => {
     firebase.database().ref(`/mensagens/${usuarioEmailB64}/${contatoEmailB64}`)
      .on('value', snapshot => {
        dispatch({ type: LISTA_CONVERSA_USUARIO, payload: snapshot.val() });
-     })
-  }
+     });
+  };
 };
