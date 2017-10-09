@@ -28,6 +28,9 @@ class Conversa extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (this.props.contatoEmail !== nextProps.contatoEmail) {
+      this.props.conversaUsuarioFetch(nextProps.contatoEmail);
+    }
     this.criaFonteDeDados(nextProps.conversa);
   }
 
@@ -60,13 +63,11 @@ class Conversa extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.viewList}>
-          <Text>
-            <ListView
-              enableEmptySections
-              dataSource={this.dataSource}
-              renderRow={this.renderRow}
-            />
-          </Text>
+          <ListView
+            enableEmptySections
+            dataSource={this.dataSource}
+            renderRow={this.renderRow}
+          />
         </View>
         
         <View style={styles.viewActions}>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   },
   messageSendView: {
     alignItems: 'flex-end',
-    marginTopo: 5,
+    marginTop: 5,
     marginBottom: 5,
     marginLeft: 40
   },
@@ -121,8 +122,8 @@ const styles = StyleSheet.create({
     elevation: 1
   },
   messageReceiveView: {
-    alignItems: 'flex-starg',
-    marginTopo: 5,
+    alignItems: 'flex-start',
+    marginTop: 5,
     marginBottom: 5,
     marginRight: 40
   },

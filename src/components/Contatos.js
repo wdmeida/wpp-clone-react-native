@@ -43,7 +43,7 @@ class Contatos extends Component {
       >
         <View style={styles.itemContainer}>
           <Text style={styles.nameStyle}>{contato.nome}</Text>
-         <Text style={styles.emailStyle}>{contato.email}</Text>
+          <Text style={styles.emailStyle}>{contato.email}</Text>
        </View>
       </TouchableHighlight>
     );
