@@ -142,7 +142,7 @@ export const conversasUsuarioFetch = () => {
 
     firebase.database().ref(`/usuario_conversas/${usuarioEmailB64}`)
       .on('value', snapshot => {
-        dispatch({ type: LISTA_CONVERSAS_USUARIO, payload: snapshot.val() })
+        dispatch({ type: LISTA_CONVERSAS_USUARIO, payload: snapshot.val() });
       });
   };
 };
