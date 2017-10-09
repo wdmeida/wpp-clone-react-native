@@ -5,7 +5,9 @@ import _ from 'lodash';
 import { 
   ADICIONA_CONTATO_ERRO,
   ADICIONA_CONTATO_SUCESSO,
+  ENVIA_MENSAGEM_SUCESSO,
   LISTA_CONTATO_USUARIO,
+  LISTA_CONVERSA_USUARIO,
   MODIFICA_ADICIONA_CONTATO_EMAIL,
   MODIFICA_MENSAGEM 
 } from './types';
@@ -96,7 +98,7 @@ export const enviarMensagem = (mensagem, contatoNome, contatoEmail) => {
       .then(() => {
         firebase.database().ref(`/mensagens/${contatoEmailB64}/${usuarioEmailB64}`)
           .push({ mensagem, tipo: 'r' })
-          .then(() => dispatch({ type: 'xyz' }));
+          .then(() => dispatch({ type: ENVIA_MENSAGEM_SUCESSO }));
       })
       .then(() => { //Armazenar o cabeçalho de conversa do usuário autenticado.
         firebase.database().ref(`/usuario_conversas/${usuarioEmailB64}/${contatoEmailB64}`)
@@ -113,5 +115,20 @@ export const enviarMensagem = (mensagem, contatoNome, contatoEmail) => {
               .set({ nome: dadosUsuario.nome, email: usuarioEmail });
           });
       });
+  };
+};
+
+export const conversaUsuarioFetch = contatoEmail => {
+  const { currentUser } = firebase.auth();
+
+  //Compor os emails na base64
+  const usuarioEmailB64 = b64.encode(currentUser.email);
+  const contatoEmailB64 = b64.encode(contatoEmail);
+
+  return dispatch => {
+    firebase.database().ref(`/mensagens/${usuarioEmailB64}/${contatoEmailB64}`)
+     .on('value', snapshot => {
+       dispatch({ type: LISTA_CONVERSA_USUARIO, payload: snapshot.val() });
+     });
   };
 };

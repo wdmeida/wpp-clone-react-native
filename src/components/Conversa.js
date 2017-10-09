@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ListView,
   Image,
   StyleSheet, 
   Text,
@@ -9,8 +10,10 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 
-import { 
+import {
+  conversaUsuarioFetch, 
   enviarMensagem, 
   modificaMensagem 
 } from '../actions/AppActions';
@@ -18,16 +21,53 @@ import {
 const ENVIAR_MENSAGEM_IMG = require('../imgs/enviar_mensagem.png');
 
 class Conversa extends Component {
+
+  componentWillMount() {
+    this.props.conversaUsuarioFetch(this.props.contatoEmail);
+    this.criaFonteDeDados(this.props.conversa);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.contatoEmail !== nextProps.contatoEmail) {
+      this.props.conversaUsuarioFetch(nextProps.contatoEmail);
+    }
+    this.criaFonteDeDados(nextProps.conversa);
+  }
+
+  criaFonteDeDados(conversa) {
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    this.dataSource = ds.cloneWithRows(conversa);
+  }
+
   _enviarMensagem() {
     const { mensagem, contatoNome, contatoEmail } = this.props;
     this.props.enviarMensagem(mensagem, contatoNome, contatoEmail);
+  }
+
+  renderRow(texto) {
+    if (texto.tipo === 'e') {
+      return (
+        <View style={styles.messageSendView}>
+          <Text style={styles.messageSendText}>{texto.mensagem}</Text>
+        </View>
+      );
+    } 
+    return (
+      <View style={styles.messageReceiveView}>
+        <Text style={styles.messageReceiveText}>{texto.mensagem}</Text>
+      </View>
+    );
   }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.viewList}>
-          <Text>Lista</Text>
+          <ListView
+            enableEmptySections
+            dataSource={this.dataSource}
+            renderRow={this.renderRow}
+          />
         </View>
         
         <View style={styles.viewActions}>
@@ -67,15 +107,48 @@ const styles = StyleSheet.create({
     flex: 4,
     backgroundColor: '#FFF',
     fontSize: 18
+  },
+  messageSendView: {
+    alignItems: 'flex-end',
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 40
+  },
+  messageSendText: {
+    fontSize: 18,
+    color: '#000',
+    padding: 10,
+    backgroundColor: '#DBF5B4',
+    elevation: 1
+  },
+  messageReceiveView: {
+    alignItems: 'flex-start',
+    marginTop: 5,
+    marginBottom: 5,
+    marginRight: 40
+  },
+  messageReceiveText: {
+    fontSize: 18,
+    color: '#000',
+    padding: 10,
+    backgroundColor: '#F7F7F7',
+    elevation: 1
   }
 });
 
-const mapStateToProps = state => ({
-  mensagem: state.AppReducer.mensagem
-});
+const mapStateToProps = state => {
+  const conversa = _.map(state.ListaConversaReducer, (val, uid) => {
+    return { ...val, uid };
+  });
+  
+  return ({
+    conversa,        
+    mensagem: state.AppReducer.mensagem
+  });
+};
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  enviarMensagem, modificaMensagem
+  conversaUsuarioFetch, enviarMensagem, modificaMensagem
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Conversa);
