@@ -8,6 +8,7 @@ import {
   ENVIA_MENSAGEM_SUCESSO,
   LISTA_CONTATO_USUARIO,
   LISTA_CONVERSA_USUARIO,
+  LISTA_CONVERSAS_USUARIO,
   MODIFICA_ADICIONA_CONTATO_EMAIL,
   MODIFICA_MENSAGEM 
 } from './types';
@@ -130,5 +131,18 @@ export const conversaUsuarioFetch = contatoEmail => {
      .on('value', snapshot => {
        dispatch({ type: LISTA_CONVERSA_USUARIO, payload: snapshot.val() });
      });
+  };
+};
+
+export const conversasUsuarioFetch = () => {
+  const { currentUser } = firebase.auth();
+
+  return dispatch => {
+    const usuarioEmailB64 = b64.encode(currentUser.email);
+
+    firebase.database().ref(`/usuario_conversas/${usuarioEmailB64}`)
+      .on('value', snapshot => {
+        dispatch({ type: LISTA_CONVERSAS_USUARIO, payload: snapshot.val() });
+      });
   };
 };
