@@ -17,14 +17,14 @@ class Conversas extends Component {
  
   componentWillMount() {
     this.props.conversasUsuarioFetch();
-    this.criaFonteDedados(this.props.conversas);
+    this.criaFonteDeDados(this.props.conversas);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.criaFonteDedados(nextProps.conversas);
+    this.criaFonteDeDados(nextProps.conversas);
   }
 
-  criaFonteDedados(conversas) {
+  criaFonteDeDados(conversas) {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.dataSource = ds.cloneWithRows(conversas);
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const conversas = _.map(state.ListaConversasReducers, (val, uid) => {
+  const conversas = _.map(state.ListaConversasReducer, (val, uid) => {
     return { ...val, uid };
   });
 
