@@ -10,6 +10,7 @@ import {
   View
 } from 'react-native';
 import { TabBar } from 'react-native-tab-view';
+import firebase from 'firebase';
 
 import { habilitaInclusaoContato } from '../actions/AppActions';
 
@@ -35,7 +36,11 @@ const TabBarMenu = props => (
         </View>
 
         <View style={styles.exitTextView}>
-          <Text style={styles.exitText}>Sair</Text>
+          <TouchableHighlight
+            onPress={() => firebase.auth().signOut().then(() => Actions.formLogin())}
+          >
+            <Text style={styles.exitText}>Sair</Text>
+          </TouchableHighlight>
         </View>
       </View>
     </View>
