@@ -20,12 +20,11 @@ Enter the app directory, "wpp_clone" and install dependencies:
 To execute the project, after choosing the method that will be used (emulator or device), execute one of the commands below:
 
 * For Android:
-** ```$ react-native run-android```
+```$ react-native run-android```
 
 * For IOS:
-** ```$ react-native run-ios```
+```$ react-native run-ios```
 
 For more information on running an application developed in React Native on the device, refer to its documentation in the Link below:
 
 * [Running on Device](http://facebook.github.io/react-native/releases/0.49/docs/running-on-device.html#running-on-device)
-* []
